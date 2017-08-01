@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 
 const User = new Schema({
   login: String,
+  password: String,
   name: String,
   permissions: {
     common: {

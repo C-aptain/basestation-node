@@ -1,10 +1,12 @@
-const express = require('express')
-const app = express()
+const express    = require('express')
 const bodyParser = require('body-parser')
-const port = process.env.PORT || 1337
-const mongoose = require('mongoose')
+const mongoose   = require('mongoose')
+const db         = require('./db.js')
+
 const router = express.Router()
-const db = require('./db.js')
+const app    = express()
+
+const port = process.env.PORT || 1337
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
@@ -23,9 +25,11 @@ router.get('/', (req, res) => {
 })
 
 const users = require('./app/routes/user')
+const auth  = require('./app/routes/auth')
 
 app.use('/api', router)
 app.use('/api/users', users)
+app.use('/api/login', auth)
 
 app.listen(port)
 console.log(`Server is live at ${port}`)
