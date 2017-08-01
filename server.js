@@ -24,12 +24,14 @@ router.get('/', (req, res) => {
   res.json({message: 'zdarova! welcome to basestation api!'})
 })
 
-const users = require('./app/routes/user')
-const auth  = require('./app/routes/auth')
+const users          = require('./app/routes/user')
+const auth           = require('./app/routes/auth')
+const networkElement = require('./app/routes/network-element')
 
 app.use('/api', router)
 app.use('/api/users', users)
 app.use('/api/login', auth)
+app.use('/api/network-elements', networkElement)
 
 app.listen(port)
 console.log(`Server is live at ${port}`)
