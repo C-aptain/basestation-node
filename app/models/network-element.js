@@ -4,8 +4,11 @@ const Schema = mongoose.Schema
 const NetworkElement = new Schema({
   name: String,
   type: String,
+  status: String,
+
   parentId: String,
   childrenIds: [String],
+
   host: {
     name: String,
   },
@@ -20,7 +23,7 @@ const NetworkElement = new Schema({
       value: String,
       description: {
         abbreviation: String,
-        type: String,
+        metaType: String,
         text: String,
         modification: String,
       },

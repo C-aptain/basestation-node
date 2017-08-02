@@ -1,5 +1,7 @@
-const express = require('express')
 const NetworkElement = require('../models/network-element')
+const mongoose       = require('mongoose')
+const express        = require('express')
+
 const router = express.Router()
 
 router.route('/')
@@ -21,20 +23,43 @@ router.route('/')
           }
 
           parent.childrenIds = parent.childrenIds || []
-          parent.childrenIds.push()
+          parent.childrenIds.push(ne._id)
+          parent.save()
         })
       }
     })
   })
 
   .get((req, res) => {
-    NetworkElement.find((e, nes) => {
-      if (e) {
-        res.send(e)
+    if (req.body.ids && req.body.ids.length) {
+      let ids = req.body.ids.map(id => mongoose.Types.ObjectId(id))
+
+      NetworkElement.find({'_id': { $in: ids}})
+    } else {
+      let q = {}
+      let search = req.query.search
+      let type = req.query.type
+
+      if (search) {
+        q.name =  new RegExp(search, 'i')
       }
 
-      res.json(nes)
-    })
+      if (type) {
+        q.type = type
+      }
+
+      NetworkElement.find(q, (e, nes) => {
+        if (e) {
+          res.send(e)
+        }
+
+        if (search) {
+
+        }
+
+        res.json(nes)
+      })
+    }
   })
 
 router.route('/:id')
