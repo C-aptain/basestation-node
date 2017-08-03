@@ -31,10 +31,16 @@ router.route('/')
   })
 
   .get((req, res) => {
-    if (req.body.ids && req.body.ids.length) {
-      let ids = req.body.ids.map(id => mongoose.Types.ObjectId(id))
+    if (req.query.ids && req.query.ids.length) {
+      let ids = req.query.ids.map(id => mongoose.Types.ObjectId(id))
 
-      NetworkElement.find({'_id': { $in: ids}})
+      NetworkElement.find({'_id': {$in: ids}}, (e, nes) => {
+        if (e) {
+          res.send(e)
+        }
+
+        res.json(nes)
+      })
     } else {
       let q = {}
       let search = req.query.search
