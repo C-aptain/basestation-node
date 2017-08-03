@@ -4,6 +4,44 @@ const express        = require('express')
 
 const router = express.Router()
 
+function callback(res, nes) {
+  let parentIds = []
+
+  nes.forEach(ne => {
+    let id = ne.parentId
+
+    if (!id || parentIds.indexOf(id) !== -1 || nes.find(e => {return e._id == id})) {
+      return
+    }
+
+    parentIds.push(id)
+  })
+
+  if (parentIds.length) {
+    let ids = parentIds.map(id => mongoose.Types.ObjectId(id))
+
+    NetworkElement.find({'_id': {$in: ids}}, (e, parents) => {
+      if (e) {
+        res.send(e)
+      }
+
+      parents.forEach(ne => {
+        if (nes.find(e => e._id == ne._id)) {
+          return
+        }
+
+        nes.push(ne)
+      })
+
+      callback(res, nes)
+    })
+
+    return
+  }
+
+  res.json(nes)
+}
+
 router.route('/')
 
   .post((req, res) => {
@@ -60,10 +98,10 @@ router.route('/')
         }
 
         if (search) {
-
+          callback(res, nes)
+        } else {
+          res.json(nes)
         }
-
-        res.json(nes)
       })
     }
   })
