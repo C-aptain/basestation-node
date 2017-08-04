@@ -88,7 +88,9 @@ router.route('/:id')
         res.send(e)
       }
 
-      //update somehow
+      for (let key in req.body) {
+        ne[key] = req.body[key]
+      }
 
       ne.save((e) => {
         if (e) {

@@ -12,6 +12,7 @@ const NetworkElement = new Schema({
   host: {
     name: String,
   },
+  hostIp: String,
   ip: String,
   mBts: Boolean,
   ip2: String,
