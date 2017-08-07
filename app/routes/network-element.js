@@ -33,10 +33,19 @@ router.route('/')
   })
 
   .get((req, res) => {
+    let type = req.query.type
+
     if (req.query.ids && req.query.ids.length) {
       let ids = req.query.ids.map(id => mongoose.Types.ObjectId(id))
+      let q = {'_id': {$in: ids}}
 
-      NetworkElement.find({'_id': {$in: ids}}, (e, nes) => {
+      if (type) {
+        q.type = type
+      }
+
+      console.log(q)
+
+      NetworkElement.find(q, (e, nes) => {
         if (e) {
           res.send(e)
         }
@@ -46,7 +55,6 @@ router.route('/')
     } else {
       let q = {}
       let search = req.query.search
-      let type = req.query.type
 
       if (search) {
         q.name =  new RegExp(search, 'i')
