@@ -59,5 +59,8 @@ app.use('/api/users', users)
 app.use('/api/login', auth)
 app.use('/api/network-elements', networkElement)
 
+// app.use(express.static('./dist'))
+// app.use((req, res) => res.sendFile(`${__dirname}/dist/index.html`))
+
 app.listen(port)
 console.log(`Server is live at ${port}`)
